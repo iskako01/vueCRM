@@ -1,11 +1,14 @@
-const firebase = require("../firebase.js");
+import { firebase, database } from "../firebase";
+import IcreateCategory from "../types/Icategories";
+import IupdateCategory from "../types/Icategories";
+
 export default {
   actions: {
-    async createCategory({ commit, dispatch }, values) {
+    async createCategory({ commit, dispatch }: any, values: IcreateCategory) {
       try {
         const uid = await dispatch("getUid");
         console.log(values);
-        const category = await firebase.database
+        const category = await database
           .ref(`/users/${uid}/categories`)
           .push({ ...values });
         return { ...values, id: category.key };
@@ -14,11 +17,14 @@ export default {
         throw e;
       }
     },
-    async updateCategory({ commit, dispatch }, { title, limit, id }) {
+    async updateCategory(
+      { commit, dispatch }: any,
+      { title, limit, id }: IupdateCategory
+    ) {
       try {
-        const uid = await dispatch("getUid");
+        const uid: string = await dispatch("getUid");
         console.log(title, limit, id);
-        await firebase.database
+        await database
           .ref(`/users/${uid}/categories`)
           .child(id)
           .update({ title, limit });
@@ -28,14 +34,14 @@ export default {
         throw e;
       }
     },
-    async fetchCategories({ commit, dispatch }) {
+    async fetchCategories({ commit, dispatch }: any) {
       try {
-        const uid = await dispatch("getUid");
-        const db = await firebase.database.ref(`/users/${uid}/categories`);
-        console.log(db);
+        const uid: string = await dispatch("getUid");
         const categories = (
-          await firebase.database.ref(`/users/${uid}/categories`).once("value")
+          await database.ref(`/users/${uid}/categories`).once("value")
         ).val();
+        console.log(categories);
+
         return Object.keys(categories).map((key) => ({
           ...categories[key],
           id: key,
@@ -45,15 +51,12 @@ export default {
         throw e;
       }
     },
-    async fetchCategoryById({ dispatch, commit }, id) {
+    async fetchCategoryById({ dispatch, commit }: any, id: string) {
       try {
-        const uid = await dispatch("getUid");
+        const uid: string = await dispatch("getUid");
 
         const category = (
-          await firebase.database
-            .ref(`/users/${uid}/categories`)
-            .child(id)
-            .once("value")
+          await database.ref(`/users/${uid}/categories`).child(id).once("value")
         ).val();
         return { ...category };
       } catch (e) {

@@ -14,26 +14,28 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, computed } from "vue";
+import { useStore } from "vuex";
+export default defineComponent({
   props: ["rates"],
   inject: ["currencis"],
+  setup(prop) {
+    const store = useStore();
+    const bills = computed(() => {
+      return store.getters.info.bill;
+    });
+    const base = computed(() => {
+      return bills.value / (prop.rates["KZT"] / this.rates["EUR"]);
+    });
 
-  computed: {
-	  bills(){
-		  return this.$store.getters.info.bill
-	  },
-    base() {
-      return this.bills / (this.rates["KZT"] / this.rates["EUR"]);
-    },
+    const getCurrency = (currency) => {
+      return Math.floor(base.value * this.rates[currency]);
+    };
+
+    return {};
   },
-  methods: {
-    getCurrency(currency) {
-      return Math.floor(this.base * this.rates[currency]);
-    },
-  },
-};
+});
 </script>
 
-<style>
-</style>
+<style></style>

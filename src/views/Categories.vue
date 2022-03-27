@@ -23,9 +23,9 @@
 import CategoryCreate from "../components/CategoryCreate.vue";
 import CategoryEdit from "../components/CategoryEdit.vue";
 import loader from "../components/app/Loader.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineComponent } from "vue";
 import { useStore } from "vuex";
-export default {
+export default defineComponent({
   setup() {
     const store = useStore();
 
@@ -59,7 +59,7 @@ export default {
     };
   },
   components: { CategoryCreate, CategoryEdit, loader },
-};
+});
 </script>
 
 <style></style>

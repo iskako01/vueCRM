@@ -17,24 +17,26 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, onMounted, ref } from "vue";
+import { useStore } from "vuex";
 import Navbar from "../components/app/Navbar.vue";
 import Sidebar from "../components/app/Sidebar.vue";
 
-export default {
-  async mounted() {
-    if (!Object.keys(this.$store.getters.info).length) {
-      await this.$store.dispatch("fetchInfo");
-    } else console.log("mounted fetchInfo");
-  },
-  data() {
-    return {
-      isOpen: true,
-    };
-  },
+export default defineComponent({
   components: { Sidebar, Navbar },
-};
+  setup() {
+    const store = useStore();
+    const isOpen = ref(true);
+
+    onMounted(async () => {
+      if (!Object.keys(store.getters.info).length) {
+        await store.dispatch("fetchInfo");
+      } else console.log("mounted fetchInfo");
+    });
+    return {};
+  },
+});
 </script>
 
-<style>
-</style>
+<style></style>

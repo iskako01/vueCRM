@@ -75,13 +75,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 name: "record";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import loader from "../components/app/Loader.vue";
 
-export default {
+export default defineComponent({
   setup() {
     const store = useStore();
 
@@ -128,17 +128,15 @@ export default {
               date: new Date().toJSON(),
             });
 
-            const bill =
+            const bill: number =
               type.value === "income"
                 ? infoBill.value.bill + amount.value
                 : infoBill.value.bill - amount.value;
 
-            await store.dispatch("updateInfo", { bill });
+            await store.dispatch("updateInfo", bill);
           } catch (e) {}
         } else {
-          console.log(
-            `Недостаточно средств на счету(${amount.value - bill.value})`
-          );
+          console.log(`Недостаточно средств на счету(${amount.value - bill})`);
         }
       }
     };
@@ -155,7 +153,7 @@ export default {
     };
   },
   components: { loader },
-};
+});
 </script>
 
 <style></style>

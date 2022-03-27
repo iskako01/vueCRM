@@ -4,7 +4,7 @@
       <h3>История записей</h3>
     </div>
 
-    <Chart class="history-chart" />
+    <!-- <Chart class="history-chart" /> -->
 
     <loader v-if="loading" />
     <p v-else-if="!records.length">
@@ -46,7 +46,7 @@
 <script>
 import HistoryTable from "../components/HistoryTable.vue";
 import loader from "../components/app/Loader.vue";
-import Chart from "../components/app/Chart.vue";
+// import Chart from "../components/app/Chart.vue";
 import _ from "lodash";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
@@ -130,7 +130,7 @@ export default {
       paginationNumber,
     };
   },
-  components: { HistoryTable, loader, Chart },
+  components: { HistoryTable, loader },
 };
 </script>
 

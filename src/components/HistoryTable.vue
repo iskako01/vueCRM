@@ -35,10 +35,9 @@
   </table>
 </template>
 
-<script>
-
-export default {
-
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   props: {
     records: {
       type: Array,
@@ -49,8 +48,7 @@ export default {
 
     return { records };
   },
-};
+});
 </script>
 
-<style>
-</style>
+<style></style>

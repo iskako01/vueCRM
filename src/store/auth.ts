@@ -1,36 +1,40 @@
-const firebase = require("../firebase.js");
+import { auth, database } from "../firebase";
+import Ilogin from "../types/Iauth";
+import IsignUp from "../types/Iauth";
 
 export default {
   actions: {
-    async login({ commit }, { email, password }) {
+    async login({ commit }: any, values: Ilogin) {
       try {
-        await firebase.auth.signInWithEmailAndPassword(email, password);
+        console.log(values);
+
+        await auth.signInWithEmailAndPassword(values.email, values.password);
       } catch (e) {
         commit("setError", e);
         throw e;
       }
     },
-    async signUp({ commit, dispatch }, { email, password, name }) {
+    async signUp(
+      { commit, dispatch }: any,
+      { email, password, name }: IsignUp
+    ) {
       try {
-        await firebase.auth.createUserWithEmailAndPassword(email, password);
+        await auth.createUserWithEmailAndPassword(email, password);
         const uid = await dispatch("getUid");
 
-        await firebase.database
-          .ref(`/users/${uid}/info`)
-          .set({ bill: 10000, name });
+        await database.ref(`/users/${uid}/info`).set({ bill: 10000, name });
       } catch (e) {
         commit("setError", e);
         throw e;
       }
     },
-    async logout({ commit }) {
-      await firebase.auth.signOut();
+    async logout({ commit }: any) {
+      await auth.signOut();
       commit("clearInfo");
     },
     getUid() {
       try {
-        const user = firebase.auth.currentUser;
-        console.log(user.uid);
+        const user = auth.currentUser;
         return user ? user.uid : null;
       } catch (e) {
         throw e;

@@ -43,10 +43,10 @@
 </template>
 
 <script>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, defineComponent } from "vue";
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   props: ["categories"],
   emits: ["updated"],
   setup(props, { emit }) {
@@ -55,7 +55,7 @@ export default {
     const select = ref("");
     const title = ref("");
     const limit = ref(100);
-    const current = ref(null);
+    const current = ref("");
     const categories = props.categories;
 
     current.value = categories[0].id;
@@ -90,8 +90,7 @@ export default {
 
     return { select, categories, title, limit, current, onSubmit };
   },
-};
+});
 </script>
 
-<style>
-</style>
+<style></style>

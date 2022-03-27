@@ -40,37 +40,51 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      date: new Date(),
-      interval: null,
-      dropdown: null,
+import {
+  defineComponent,
+  onMounted,
+  onBeforeUnmount,
+  ref,
+  computed,
+} from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+export default defineComponent({
+  setup() {
+    const date = ref(Date());
+    const interval = ref(100);
+    const dropdown = ref(null);
+    const store = useStore();
+    const router = useRouter();
+
+    const name = computed(() => {
+      return store.getters.info.name;
+    });
+
+    onMounted(() => {
+      console.log(M);
+      (interval.value = setInterval(() => {
+        date.value = new Date();
+      }, 1000)),
+        (dropdown.value = M.Dropdown.init(dropdown.value, {
+          constrainWidth: true,
+        }));
+    });
+
+    onBeforeUnmount(() => {
+      clearInterval(interval.value);
+      if (dropdown.value && dropdown.value.destroy) {
+        dropdown.value.destroy();
+      }
+    });
+
+    const logout = () => {
+      store.dispatch("logout");
+      router.push("/login?message=logout");
     };
-  },
 
-  mounted() {
-    (this.interval = setInterval(() => {
-      this.date = new Date();
-    }, 1000)),
-      (this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
-        constrainWidth: true,
-      }));
-  },
-  beforeDestroy() {
-    clearInterval(this.interval);
-    if (this.dropdown && this.dropdown.destroy) {
-      this.dropdown.destroy();
-    }
-  },
-
-  methods: {
-    logout() {
-      this.$store.dispatch("logout");
-      this.$router.push("/login?message=logout");
-    },
-    dateFilter(value, format = "date") {
-      value = this.date;
+    const dateFilter = (value, format = "date") => {
+      value = date.value;
       const options = {};
 
       if (format.includes("date")) {
@@ -83,15 +97,10 @@ export default {
       }
 
       return new Intl.DateTimeFormat("ru-RU", options).format(new Date(value));
-    },
+    };
+    return { dateFilter, logout };
   },
-  computed: {
-    name() {
-      return this.$store.getters.info.name;
-    },
-  },
-};
+});
 </script>
 
-<style>
-</style>
+<style></style>

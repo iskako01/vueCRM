@@ -46,68 +46,65 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
+import { ref, onMounted, defineComponent } from "vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import { object, string } from "yup";
 import messages from "../utils/messages";
+import Ilogin from "../types/Iauth";
 
 const loginFormSchema = object().shape({
   email: string().required().email(),
   password: string().required().min(4),
 });
 
-export default {
+export default defineComponent({
   name: "login",
-  mounted() {
-    if (messages[this.$route.query.message]) {
-      this.$message(messages[this.$route.query.message]);
-    }
-  },
-
-  data() {
-    return {
-      values: {
-        email: "",
-        password: "",
-      },
-      errors: {
-        email: "",
-        password: "",
-      },
-    };
-  },
-
-  methods: {
-    async submitHandler() {
+  setup() {
+    const values = ref<Ilogin[]>({
+      email: "",
+      password: "",
+    });
+    const errors = ref<Ilogin[]>({
+      email: "",
+      password: "",
+    });
+    values.value.email = 23;
+    const route = useRoute();
+    const store = useStore();
+    onMounted(() => {
+      if (messages[route.query.message]) {
+        this.$message(messages[route.query.message]);
+      }
+    });
+    const submitHandler = async () => {
       try {
-        await this.$store.dispatch("login", {
-          email: this.values.email,
-          password: this.values.password,
-        });
-        this.$router.push("/");
+        await store.dispatch("login", values.value);
+        router.push("/");
       } catch (e) {}
       loginFormSchema
-        .validate(this.values, { abortEarly: false })
+        .validate(values.value, { abortEarly: false })
         .then(() => {
-          this.errors = {};
+          errors.value = {};
         })
         .catch((err) => {
           err.inner.forEach((error) => {
-            this.errors[error.path] = error.message;
+            errors.value[error.path] = error.message;
           });
         });
-    },
-
-    validate(field) {
+    };
+    const validate = (field) => {
       loginFormSchema
-        .validateAt(field, this.values)
+        .validateAt(field, values.value)
         .then(() => {
-          this.errors[field] = "";
+          errors.value[field] = "";
         })
         .catch((err) => {
-          this.errors[field] = err.message;
+          errors.value[field] = err.message;
         });
-    },
+    };
+    return { validate, submitHandler, values };
   },
-};
+});
 </script>
-

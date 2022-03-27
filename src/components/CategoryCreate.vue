@@ -31,12 +31,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useForm } from "vee-validate";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineComponent } from "vue";
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   emits: ["created"],
   setup(_, { emit }) {
     onMounted(() => {
@@ -45,7 +45,7 @@ export default {
     const store = useStore();
 
     const title = ref("");
-    const limit = ref(100);
+    const limit = ref (100);
 
     const createCategory = async () => {
       if (title.value != "" && limit.value > 100) {
@@ -67,7 +67,7 @@ export default {
       limit,
     };
   },
-};
+});
 </script>
 
 <style></style>
