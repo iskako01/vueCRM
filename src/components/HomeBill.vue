@@ -26,14 +26,14 @@ export default defineComponent({
       return store.getters.info.bill;
     });
     const base = computed(() => {
-      return bills.value / (prop.rates["KZT"] / this.rates["EUR"]);
+      return bills.value / (prop.rates["KZT"] / prop.rates["EUR"]);
     });
 
-    const getCurrency = (currency) => {
-      return Math.floor(base.value * this.rates[currency]);
+    const getCurrency = (currency: number) => {
+      return Math.floor(base.value * prop.rates[currency]);
     };
 
-    return {};
+    return { getCurrency };
   },
 });
 </script>

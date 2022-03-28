@@ -48,11 +48,12 @@
 
 <script lang="ts">
 import { ref, onMounted, defineComponent } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { object, string } from "yup";
 import messages from "../utils/messages";
-import Ilogin from "../types/Iauth";
+import Ilogin from "../types/auth/Ilogin";
+import IloginError from "../types/auth/IloginError";
 
 const loginFormSchema = object().shape({
   email: string().required().email(),
@@ -62,20 +63,22 @@ const loginFormSchema = object().shape({
 export default defineComponent({
   name: "login",
   setup() {
-    const values = ref<Ilogin[]>({
+    const values = ref<Ilogin>({
       email: "",
       password: "",
     });
-    const errors = ref<Ilogin[]>({
+    const errors = ref<IloginError>({
       email: "",
       password: "",
     });
-    values.value.email = 23;
+
+    const router = useRouter();
     const route = useRoute();
     const store = useStore();
     onMounted(() => {
-      if (messages[route.query.message]) {
-        this.$message(messages[route.query.message]);
+      const routeMes= route.query.message;
+      if (messages[routeMes]) {
+        this.$message(messages[routeMes]);
       }
     });
     const submitHandler = async () => {
@@ -94,7 +97,7 @@ export default defineComponent({
           });
         });
     };
-    const validate = (field) => {
+    const validate = (field: string) => {
       loginFormSchema
         .validateAt(field, values.value)
         .then(() => {

@@ -92,7 +92,7 @@ export default defineComponent({
     const type = ref("outcome");
     const amount = ref(0);
     const description = ref("");
-
+	
     onMounted(async () => {
       if (!categories.value.length) {
         console.log(categories.value.length);
@@ -102,8 +102,8 @@ export default defineComponent({
 
       loading.value = false;
       setTimeout(() => {
-        M.updateTextFields();
-        select.value = M.FormSelect.init(select.value);
+        window.M.updateTextFields();
+        select.value = window.M.FormSelect.init(select.value);
       }, 0);
     });
 

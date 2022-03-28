@@ -63,8 +63,8 @@ export default defineComponent({
     limit.value = categories[0].limit;
 
     onMounted(() => {
-      M.updateTextFields();
-      select.value = M.FormSelect.init(select.value);
+      window.M.updateTextFields();
+      select.value = window.M.FormSelect.init(select.value);
     });
 
     watch(current, (categoryId) => {

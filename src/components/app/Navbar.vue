@@ -62,11 +62,10 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      console.log(M);
       (interval.value = setInterval(() => {
         date.value = new Date();
       }, 1000)),
-        (dropdown.value = M.Dropdown.init(dropdown.value, {
+        (dropdown.value = window.M.Dropdown.init(dropdown.value, {
           constrainWidth: true,
         }));
     });

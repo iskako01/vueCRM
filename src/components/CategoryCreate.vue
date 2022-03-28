@@ -40,12 +40,12 @@ export default defineComponent({
   emits: ["created"],
   setup(_, { emit }) {
     onMounted(() => {
-      M.updateTextFields();
+      window.M.updateTextFields();
     });
     const store = useStore();
 
     const title = ref("");
-    const limit = ref (100);
+    const limit = ref(100);
 
     const createCategory = async () => {
       if (title.value != "" && limit.value > 100) {

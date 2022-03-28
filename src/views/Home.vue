@@ -19,7 +19,8 @@
 import Loader from "../components/app/Loader.vue";
 import HomeBill from "../components/HomeBill.vue";
 import HomeCurrency from "../components/HomeCurrency.vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "Home",
@@ -28,24 +29,41 @@ export default defineComponent({
       currencis: this.currencis,
     };
   },
-  data() {
-    return {
-      loading: true,
-      currency: null,
-      currencis: ["KZT", "CZK", "EUR"],
-    };
-  },
-  async mounted() {
-    this.currency = await this.$store.dispatch("fetchCurrency");
-    this.loading = false;
-  },
-  methods: {
-    async refresh() {
-      this.loading = true;
-      this.currency = await this.$store.dispatch("fetchCurrency");
-      this.loading = false;
-    },
-  },
   components: { HomeBill, HomeCurrency, Loader },
+  setup() {
+    const store = useStore();
+    const loading = ref(true);
+    const currency = ref(null);
+    const currencis = ref(["KZT", "CZK", "EUR"]);
+
+    onMounted(async () => {
+      currency.value = await store.dispatch("fetchCurrency");
+      loading.value = false;
+    });
+    const refresh = async () => {
+      loading.value = true;
+      currency.value = await store.dispatch("fetchCurrency");
+      loading.value = false;
+    };
+    return { currencis, refresh };
+  },
+  //   data() {
+  //     return {
+  //       loading: true,
+  //       currency: null,
+  //       currencis: ["KZT", "CZK", "EUR"],
+  //     };
+  //   },
+  //   async mounted() {
+  //     this.currency = await this.$store.dispatch("fetchCurrency");
+  //     this.loading = false;
+  //   },
+  //   methods: {
+  //     async refresh() {
+  //       this.loading = true;
+  //       this.currency = await this.$store.dispatch("fetchCurrency");
+  //       this.loading = false;
+  //     },
+  //   },
 });
 </script>

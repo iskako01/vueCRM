@@ -1,13 +1,16 @@
 import { firebase, database } from "../firebase";
+import IstateIinfo from "../types/info/Iinfo";
+import Iinfo from "../types/info/Iinfo";
+
 export default {
   state: {
     info: {},
   },
   mutations: {
-    setInfo<T>(state: T, info: T) {
+    setInfo(state: IstateIinfo, info: Iinfo) {
       state.info = info;
     },
-    clearInfo(state: Object | null) {
+    clearInfo(state: IstateIinfo) {
       state.info = {};
     },
   },
@@ -38,7 +41,7 @@ export default {
     },
   },
   getters: {
-    info(state: Object | null) {
+    info(state: IstateIinfo) {
       return state.info;
     },
   },

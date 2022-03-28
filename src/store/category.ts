@@ -1,6 +1,6 @@
 import { firebase, database } from "../firebase";
-import IcreateCategory from "../types/Icategories";
-import IupdateCategory from "../types/Icategories";
+import IcreateCategory from "../types/categories/Icategories";
+import IupdateCategory from "../types/categories/Icategories";
 
 export default {
   actions: {

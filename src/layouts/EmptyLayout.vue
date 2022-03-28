@@ -16,12 +16,11 @@ export default defineComponent({
 
     return { error };
   },
-  watch: {
-    error(fbError) {
-      console.log("fberror", fbError);
-      this.$error(messages[fbError.code] || "Что-то пошло не так");
-    },
-  },
+  //   watch: {
+  //     error(fbError) {
+  //       this.$error(messages[fbError.code] || "Что-то пошло не так");
+  //     },
+  //   },
 });
 </script>
 
