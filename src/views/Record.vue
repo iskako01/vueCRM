@@ -77,23 +77,27 @@
 
 <script lang="ts">
 name: "record";
+import { FormSelect } from "materialize-css";
 import { onMounted, ref, computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import loader from "../components/app/Loader.vue";
+import Icategory from "../types/categories/Icategory";
 
 export default defineComponent({
   setup() {
     const store = useStore();
 
     const loading = ref(true);
-    const categories = ref([]);
-    const select = ref("");
+    const categories = ref<Icategory[]>([]);
+    const select = ref();
     const current = ref("");
     const type = ref("outcome");
     const amount = ref(0);
     const description = ref("");
-	
+
     onMounted(async () => {
+      console.log(categories.value);
+
       if (!categories.value.length) {
         console.log(categories.value.length);
         categories.value = await store.dispatch("fetchCategories");
@@ -117,7 +121,11 @@ export default defineComponent({
     });
 
     const onSubmit = async () => {
-      if (amount.value > 1 && description != "") {
+      if (amount.value > 1 && description.value != "") {
+        const bill: number =
+          type.value === "income"
+            ? infoBill.value.bill + amount.value
+            : infoBill.value.bill - amount.value;
         if (canCreateRecord) {
           try {
             await store.dispatch("createRecord", {
@@ -127,11 +135,6 @@ export default defineComponent({
               type: type.value,
               date: new Date().toJSON(),
             });
-
-            const bill: number =
-              type.value === "income"
-                ? infoBill.value.bill + amount.value
-                : infoBill.value.bill - amount.value;
 
             await store.dispatch("updateInfo", bill);
           } catch (e) {}

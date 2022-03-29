@@ -19,30 +19,30 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import CategoryCreate from "../components/CategoryCreate.vue";
 import CategoryEdit from "../components/CategoryEdit.vue";
 import loader from "../components/app/Loader.vue";
 import { onMounted, ref, defineComponent } from "vue";
 import { useStore } from "vuex";
+import Icategory from "../types/categories/Icategory";
 export default defineComponent({
   setup() {
     const store = useStore();
 
-    const categories = ref([]);
+    const categories = ref<Icategory[]>([]);
     const loading = ref(true);
     const updateCount = ref(0);
 
     onMounted(async () => {
       categories.value = await store.dispatch("fetchCategories");
-      console.log(categories.value);
       loading.value = false;
     });
 
-    const addNewCategory = (category) => {
+    const addNewCategory = (category: Icategory) => {
       categories.value.push(category);
     };
-    const updatedCategory = (category) => {
+    const updatedCategory = (category: Icategory) => {
       const index = categories.value.findIndex((c) => c.id === category.id);
       console.log(categories.value[index].title);
       categories.value[index].title = category.title;

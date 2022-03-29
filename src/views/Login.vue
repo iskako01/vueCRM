@@ -71,15 +71,17 @@ export default defineComponent({
       email: "",
       password: "",
     });
-
+    const mes = ref(messages);
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
     onMounted(() => {
-      const routeMes= route.query.message;
-      if (messages[routeMes]) {
-        this.$message(messages[routeMes]);
-      }
+      const routeMes = route.query.message;
+      console.log(routeMes);
+
+    //   if (messages[routeMes]) {
+    //     this.$message(messages[routeMes]);
+    //   }
     });
     const submitHandler = async () => {
       try {
@@ -92,19 +94,21 @@ export default defineComponent({
           errors.value = {};
         })
         .catch((err) => {
-          err.inner.forEach((error) => {
-            errors.value[error.path] = error.message;
-          });
+          err.inner.forEach(
+            (error: { path: string | number; message: any }) => {
+            //   errors.value[error.path] = error.message;
+            }
+          );
         });
     };
     const validate = (field: string) => {
       loginFormSchema
         .validateAt(field, values.value)
         .then(() => {
-          errors.value[field] = "";
+        //   errors.value[field] = "";
         })
         .catch((err) => {
-          errors.value[field] = err.message;
+        //   errors.value[field] = err.message;
         });
     };
     return { validate, submitHandler, values };

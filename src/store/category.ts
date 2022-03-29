@@ -1,6 +1,6 @@
 import { firebase, database } from "../firebase";
-import IcreateCategory from "../types/categories/Icategories";
-import IupdateCategory from "../types/categories/Icategories";
+import IcreateCategory from "../types/categories/IcreateCategory";
+import IupdateCategory from "../types/categories/IupdateCategory";
 
 export default {
   actions: {
@@ -23,12 +23,10 @@ export default {
     ) {
       try {
         const uid: string = await dispatch("getUid");
-        console.log(title, limit, id);
         await database
           .ref(`/users/${uid}/categories`)
           .child(id)
           .update({ title, limit });
-        console.log("category update");
       } catch (e) {
         commit("setError", e);
         throw e;
@@ -40,8 +38,6 @@ export default {
         const categories = (
           await database.ref(`/users/${uid}/categories`).once("value")
         ).val();
-        console.log(categories);
-
         return Object.keys(categories).map((key) => ({
           ...categories[key],
           id: key,

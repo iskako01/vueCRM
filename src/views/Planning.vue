@@ -28,18 +28,20 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 name: "planing";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import Loader from "../components/app/Loader.vue";
-export default {
+import Icategory from "../types/categories/Icategory";
+import Icategory from "../types/categories/Icategory";
+export default defineComponent({
   setup() {
     const store = useStore();
 
     const loading = ref(true);
-    const categories = ref([]);
-    const fetchCategory = ref(null);
+    const categories = ref<Icategory[]>([]);
+    const fetchCategory = ref();
 
     onMounted(async () => {
       fetchCategory.value = await store.dispatch("fetchCategories");
@@ -82,8 +84,7 @@ export default {
   },
 
   components: { Loader },
-};
+});
 </script>
 
-<style>
-</style>
+<style></style>

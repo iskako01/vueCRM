@@ -34,7 +34,7 @@ export default defineComponent({
         await store.dispatch("fetchInfo");
       } else console.log("mounted fetchInfo");
     });
-    return {};
+    return { isOpen };
   },
 });
 </script>
