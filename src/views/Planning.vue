@@ -5,13 +5,13 @@
       <h4>{{ info.bill }} KZT</h4>
     </div>
     <loader v-if="loading" />
-    <p v-else-if="!categories.length">
+    <p v-else-if="!fetchCategory.length">
       Категорий пока нет.<router-link to="/categories"
         >Добавить категорию</router-link
       >
     </p>
     <section v-else>
-      <div v-for="cat in categories" :key="cat.id">
+      <div v-for="cat in fetchCategory" :key="cat.id">
         <p>
           <strong>{{ cat.title }}</strong>
           {{ cat.spend }} из {{ cat.limit }}
@@ -44,18 +44,19 @@ export default defineComponent({
     const categories = ref<Icategory[]>([]);
     const fetchCategory = ref<Icategory[]>([]);
 
-    onMounted(async () => {
+    const info = computed(() => store.getters.info);
+
+    const categoriesPlans = async () => {
       fetchCategory.value = await store.dispatch("fetchCategories");
       const records: Irecord[] = await store.dispatch("fetchRecords");
 
-      categories.value = fetchCategory.value.map((cat: Icategory) => {
+      fetchCategory.value = fetchCategory.value.map((cat: Icategory) => {
         const spend = records
           .filter((r) => r.categoryId === cat.id)
           .filter((r) => r.type === "outcome")
           .reduce((total, records) => {
             return (total += +records.amount);
           }, 0);
-        console.log(categories);
         const percent = 100 * (spend / cat.limit);
         const progressPercent = percent > 100 ? 100 : percent;
         const progressColor =
@@ -72,15 +73,21 @@ export default defineComponent({
           tooltip,
         };
       });
-
+      console.log("fetchCategory", fetchCategory.value);
       loading.value = false;
-    });
-    const info = computed(() => store.getters.info);
+      console.log(loading.value);
+    };
+    categoriesPlans();
 
+    // onMounted(async () => {
+    //   await categoriesPlans();
+    // });
+    console.log(categories.value.length);
     return {
       loading,
       info,
-      categories,
+      fetchCategory,
+      categoriesPlans,
     };
   },
 

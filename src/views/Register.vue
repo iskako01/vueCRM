@@ -118,20 +118,25 @@ export default defineComponent({
             router.push("/login");
           })
           .catch((err) => {
-            err.inner.forEach((error) => {
-              errors.value[error.path] = error.message;
+            err.inner.forEach((error: any) => {
+              console.log(error);
+
+              //   errors.value[error.path] = error.message;
             });
           });
       } catch (e) {}
     };
     const validate = (field: string) => {
+      field = "email";
       loginFormSchema
         .validateAt(field, values.value)
         .then(() => {
-          errors.value[field] = "";
+          console.log(field);
+
+          //   errors.value[field] = "";
         })
         .catch((err) => {
-          errors.value[field] = err.message;
+          //   errors.value[field] = err.message;
         });
     };
 

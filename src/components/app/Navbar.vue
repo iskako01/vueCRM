@@ -59,7 +59,7 @@ interface IdateFilter {
 }
 export default defineComponent({
   setup() {
-    const date = ref(new Date());
+    const date = ref<string | Date>(new Date().toString());
     const interval = ref(100);
     const dropdown = ref();
     const store = useStore();
@@ -90,7 +90,7 @@ export default defineComponent({
       router.push("/login?message=logout");
     };
 
-    const dateFilter = (value, format = "date") => {
+    const dateFilter = (value: any, format = "date") => {
       value = date.value;
       const options: any = {};
 

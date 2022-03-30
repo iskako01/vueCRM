@@ -33,7 +33,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const loading = ref(true);
-    const currency = ref(null);
+    const currency = ref();
     const currencis = ref(["KZT", "CZK", "EUR"]);
 
     onMounted(async () => {
@@ -45,7 +45,7 @@ export default defineComponent({
       currency.value = await store.dispatch("fetchCurrency");
       loading.value = false;
     };
-    return { currencis, refresh, loading };
+    return { currencis, refresh, loading, currency };
   },
 });
 </script>
