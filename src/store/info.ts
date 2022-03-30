@@ -1,5 +1,5 @@
 import { firebase, database } from "../firebase";
-import IstateIinfo from "../types/info/Iinfo";
+import IstateIinfo from "../types/info/IstateInfo";
 import Iinfo from "../types/info/Iinfo";
 
 export default {

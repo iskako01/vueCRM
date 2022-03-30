@@ -39,7 +39,7 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
 import {
   defineComponent,
   onMounted,
@@ -49,11 +49,19 @@ import {
 } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+interface IdateFilter {
+  day: string;
+  month: string;
+  year: string;
+  hour: string;
+  minute: string;
+  second: string;
+}
 export default defineComponent({
   setup() {
-    const date = ref(Date());
+    const date = ref(new Date());
     const interval = ref(100);
-    const dropdown = ref(null);
+    const dropdown = ref();
     const store = useStore();
     const router = useRouter();
 
@@ -84,7 +92,7 @@ export default defineComponent({
 
     const dateFilter = (value, format = "date") => {
       value = date.value;
-      const options = {};
+      const options: any = {};
 
       if (format.includes("date")) {
         options.day = "2-digit";
@@ -97,7 +105,7 @@ export default defineComponent({
 
       return new Intl.DateTimeFormat("ru-RU", options).format(new Date(value));
     };
-    return { dateFilter, logout };
+    return { dateFilter, logout, name };
   },
 });
 </script>

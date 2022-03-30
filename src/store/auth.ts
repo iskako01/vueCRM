@@ -1,6 +1,6 @@
 import { auth, database } from "../firebase";
 import Ilogin from "../types/auth/Ilogin";
-import IsignUp from "../types/auth/IsignUp";
+import IsignUp from "../types/signUp/IsignUp";
 
 export default {
   actions: {

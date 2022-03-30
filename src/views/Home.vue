@@ -8,10 +8,10 @@
       </button>
     </div>
     <loader v-if="loading" />
-    <!-- <div class="row" v-else>
+    <div class="row" v-else>
       <home-bill :rates="currency.data.rates" />
       <home-currency :data="currency.data" />
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -45,25 +45,7 @@ export default defineComponent({
       currency.value = await store.dispatch("fetchCurrency");
       loading.value = false;
     };
-    return { currencis, refresh };
+    return { currencis, refresh, loading };
   },
-  //   data() {
-  //     return {
-  //       loading: true,
-  //       currency: null,
-  //       currencis: ["KZT", "CZK", "EUR"],
-  //     };
-  //   },
-  //   async mounted() {
-  //     this.currency = await this.$store.dispatch("fetchCurrency");
-  //     this.loading = false;
-  //   },
-  //   methods: {
-  //     async refresh() {
-  //       this.loading = true;
-  //       this.currency = await this.$store.dispatch("fetchCurrency");
-  //       this.loading = false;
-  //     },
-  //   },
 });
 </script>

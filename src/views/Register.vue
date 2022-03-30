@@ -72,8 +72,13 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import { object, string, boolean } from "yup";
+import { defineComponent, ref } from "vue";
+import IsignUp from "@/types/signUp/IsignUp";
+import IsignUpErrors from "@/types/signUp/IsignUpErrors";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 const loginFormSchema = object().shape({
   email: string().required().email(),
@@ -81,57 +86,56 @@ const loginFormSchema = object().shape({
   name: string().required(),
   agree: boolean().oneOf([true], "Message"),
 });
-export default {
+export default defineComponent({
   name: "login",
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const values = ref<IsignUp>({
+      email: "",
+      password: "",
+      name: "",
+      agree: false,
+    });
+    const errors = ref<IsignUpErrors>({
+      email: "",
+      password: "",
+      name: "",
+      agree: false,
+    });
 
-  data() {
-    return {
-      values: {
-        email: "",
-        password: "",
-        name: "",
-        agree: false,
-      },
-      errors: {
-        email: "",
-        password: "",
-        name: "",
-        agree: false,
-      },
-    };
-  },
-
-  methods: {
-    async submitHandler() {
+    const submitHandler = async () => {
       try {
         loginFormSchema
-          .validate(this.values, { abortEarly: false })
+          .validate(values.value, { abortEarly: false })
           .then(() => {
-            this.errors = {};
-            this.$store.dispatch("signUp", {
-              email: this.values.email,
-              password: this.values.password,
-              name: this.values.name,
+            errors.value = {};
+            store.dispatch("signUp", {
+              email: values.value.email,
+              password: values.value.password,
+              name: values.value.name,
             });
-            this.$router.push("/login");
+            router.push("/login");
           })
           .catch((err) => {
             err.inner.forEach((error) => {
-              this.errors[error.path] = error.message;
+              errors.value[error.path] = error.message;
             });
           });
       } catch (e) {}
-    },
-    validate(field) {
+    };
+    const validate = (field: string) => {
       loginFormSchema
-        .validateAt(field, this.values)
+        .validateAt(field, values.value)
         .then(() => {
-          this.errors[field] = "";
+          errors.value[field] = "";
         })
         .catch((err) => {
-          this.errors[field] = err.message;
+          errors.value[field] = err.message;
         });
-    },
+    };
+
+    return { submitHandler, validate, values, errors };
   },
-};
+});
 </script>

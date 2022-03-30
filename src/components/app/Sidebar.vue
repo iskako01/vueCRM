@@ -17,25 +17,28 @@
   </ul>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType, ref } from "vue";
+import Isidebar from "../../types/sidebar/Isidebar";
+
+export default defineComponent({
   props: {
     isOpen: {
-      type: Boolean,
+      type: Boolean as PropType<boolean>,
       default: true,
     },
   },
-  data: () => ({
-    links: [
+  setup() {
+    const links = ref<Isidebar[]>([
       { title: "Счет", url: "/", exact: true },
       { title: "История", url: "/history" },
       { title: "Планирование", url: "/planning" },
       { title: "Новая запись", url: "/record" },
       { title: "Категории", url: "/categories" },
-    ],
-  }),
-};
+    ]);
+    return { links };
+  },
+});
 </script>
 
-<style>
-</style>
+<style></style>

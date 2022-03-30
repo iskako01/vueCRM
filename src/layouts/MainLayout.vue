@@ -1,6 +1,6 @@
 <template>
   <div class="app-main-layout">
-    <navbar @open="isOpen = !isOpen" />
+    <navbar @open="openNavbar" />
     <sidebar :isOpen="isOpen" />
 
     <main class="app-content" :class="{ full: !isOpen }">
@@ -29,12 +29,19 @@ export default defineComponent({
     const store = useStore();
     const isOpen = ref(true);
 
+    const openNavbar = () => {
+      console.log(isOpen.value);
+
+      isOpen.value = !isOpen.value;
+    };
+
     onMounted(async () => {
       if (!Object.keys(store.getters.info).length) {
         await store.dispatch("fetchInfo");
+        console.log(isOpen.value);
       } else console.log("mounted fetchInfo");
     });
-    return { isOpen };
+    return { isOpen, openNavbar };
   },
 });
 </script>

@@ -34,27 +34,28 @@ import { onMounted, ref, computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import Loader from "../components/app/Loader.vue";
 import Icategory from "../types/categories/Icategory";
-import Icategory from "../types/categories/Icategory";
+import Irecord from "../types/records/Irecord";
+
 export default defineComponent({
   setup() {
     const store = useStore();
 
     const loading = ref(true);
     const categories = ref<Icategory[]>([]);
-    const fetchCategory = ref();
+    const fetchCategory = ref<Icategory[]>([]);
 
     onMounted(async () => {
       fetchCategory.value = await store.dispatch("fetchCategories");
-      const records = await store.dispatch("fetchRecords");
+      const records: Irecord[] = await store.dispatch("fetchRecords");
 
-      categories.value = fetchCategory.value.map((cat) => {
+      categories.value = fetchCategory.value.map((cat: Icategory) => {
         const spend = records
           .filter((r) => r.categoryId === cat.id)
           .filter((r) => r.type === "outcome")
           .reduce((total, records) => {
             return (total += +records.amount);
           }, 0);
-
+        console.log(categories);
         const percent = 100 * (spend / cat.limit);
         const progressPercent = percent > 100 ? 100 : percent;
         const progressColor =
