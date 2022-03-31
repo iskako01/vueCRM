@@ -16,7 +16,7 @@
           <strong>{{ cat.title }}</strong>
           {{ cat.spend }} из {{ cat.limit }}
         </p>
-        <div class="progress" v-tooltip="cat.tooltip">
+        <div class="progress">
           <div
             class="determinate"
             :class="[cat.progressColor]"
@@ -33,22 +33,24 @@ name: "planing";
 import { onMounted, ref, computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import Loader from "../components/app/Loader.vue";
+import IcategoryPlan from "../types/categories/IcategoryPlan";
 import Icategory from "../types/categories/Icategory";
 import Irecord from "../types/records/Irecord";
 
 export default defineComponent({
+  components: { Loader },
   setup() {
     const store = useStore();
 
     const loading = ref(true);
-    const categories = ref<Icategory[]>([]);
-    const fetchCategory = ref<Icategory[]>([]);
+    const fetchCategory = ref<IcategoryPlan[]>([]);
 
     const info = computed(() => store.getters.info);
 
-    const categoriesPlans = async () => {
+    onMounted(async () => {
       fetchCategory.value = await store.dispatch("fetchCategories");
       const records: Irecord[] = await store.dispatch("fetchRecords");
+      console.log(records);
 
       fetchCategory.value = fetchCategory.value.map((cat: Icategory) => {
         const spend = records
@@ -73,25 +75,17 @@ export default defineComponent({
           tooltip,
         };
       });
-      console.log("fetchCategory", fetchCategory.value);
       loading.value = false;
-      console.log(loading.value);
-    };
-    categoriesPlans();
+      console.log(fetchCategory.value);
+    });
+    console.log(fetchCategory.value);
 
-    // onMounted(async () => {
-    //   await categoriesPlans();
-    // });
-    console.log(categories.value.length);
     return {
       loading,
       info,
       fetchCategory,
-      categoriesPlans,
     };
   },
-
-  components: { Loader },
 });
 </script>
 
