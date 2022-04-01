@@ -4,9 +4,9 @@
       <h3>Профиль</h3>
     </div>
 
-    <form class="form">
+    <form class="form" @submit="updateProfileName">
       <div class="input-field">
-        <input id="description" type="text" />
+        <input id="description" type="text" v-model="inputName" />
         <label for="description">Имя</label>
         <span class="helper-text invalid">name</span>
       </div>
@@ -20,6 +20,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({});
+import { defineComponent, ref } from "vue";
+import { useStore } from "vuex";
+export default defineComponent({
+  setup() {
+    const store = useStore();
+    const inputName = ref("");
+
+    const updateProfileName = () => {
+      if (inputName.value != "") {
+        store.dispatch("updateProfileName", inputName.value);
+      }
+    };
+    return { inputName, updateProfileName };
+  },
+});
 </script>

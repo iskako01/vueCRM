@@ -27,13 +27,23 @@ export default {
         console.log(e);
       }
     },
-    async updateInfo({ dispatch, commit, getters }: any, bill: number) {
+    async updateInfo({ dispatch, commit, getters }: any, bill: Iinfo) {
       try {
         const uid = await dispatch("getUid");
         const updateData = { ...getters.info, bill };
         console.log("updateData", updateData);
         await database.ref(`/users/${uid}/info`).update(updateData);
         commit("setInfo", updateData);
+      } catch (e) {
+        commit("setError", e);
+        throw e;
+      }
+    },
+    async updateProfileName({ commit, getters, dispatch }: any, name: Iinfo) {
+      try {
+        const uid = await dispatch("getUid");
+        const updateData = { ...getters.info, name };
+        await database.ref(`/users/${uid}/info`).update(updateData);
       } catch (e) {
         commit("setError", e);
         throw e;

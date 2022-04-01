@@ -105,7 +105,7 @@ export default defineComponent({
 
       return new Intl.DateTimeFormat("ru-RU", options).format(new Date(value));
     };
-    return { dateFilter, logout, name };
+    return { dateFilter, logout, name, dropdown };
   },
 });
 </script>
